@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>instagram.exe — Silent hill.</title>
+
+  <!-- Poppins для цифр -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+:root{
+      --bg: #0f0f0f;
+      --window: #141414;
+      --menu: #141414;
+      --border: #141414;
+      --muted: #000000;   /* 2 текст в посте */
+    }
+
+    /* базовая сетка */
+    html,body{height:100%;margin:0;}
+  body {
+  --bg: #1e1b1a;        /*  Общий фон страницы */
+  --window: #d4a72c;    /*  Основной фон поста / окна */
+  --title: #c99a2a;     
+  --menu: radial-gradient(circle at 40% 40%, #b34a43 30%, #c51a1a 50%, #173c8a 60%,);      /*  песня */
+  --border: #2e4c74;    /*  Обводка элементов */
+  --text: #000000;     
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Courier New", monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 10px;
+  box-sizing: border-box;
+  background: radial-gradient(circle at 20% 30%, #3c2f2f 0%, transparent 40%),
+              radial-gradient(circle at 80% 70%, #2a2f3f 0%, transparent 50%),
+              linear-gradient(135deg, #1f1f1f, #2b2724, #352c2a, #2a3038);
+  color: var(--text);
+}
+
+    html,body{height:100%;margin:0;}
+    body{
+      background:var(--bg);
+      font-family: "Courier New", monospace;
+      color:var(--text);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px 10px;
+      box-sizing:border-box;
+    }
+ .window {
+  width: 400px;
+  height: 100vh;         /* на весь экран */
+  border: 2px solid var(--border);
+  box-shadow: 0 0 15px rgba(0,0,0,.7);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* чтобы градиенты не вылезали за края */
+
+  /* ====== ДВА пятна + тёмный центр (плавно) ====== */
+  background:
+    /* верхнее левое — тёплое красное пятно */
+    radial-gradient(circle at 30% 20%,
+      rgb(179, 74, 67) 0%,
+      rgba(197,26,26,0.55) 22%,
+      rgba(197, 26, 26, 0.534) 42%,
+      rgba(0,0,0,0) 70%),
+
+    /* нижнее правое — холодное синее пятно */
+    radial-gradient(circle at 80% 85%,
+      rgb(41, 84, 175) 0%,
+      rgba(23, 59, 138, 0.644) 20%,
+      rgba(23,60,138,0.22) 40%,
+      rgb(100, 70, 36) 70%),
+
+    /* центральная мягкая тёмная "перегородка" (овальная тень) */
+    radial-gradient(ellipse at 50% 55%,
+      rgba(104, 80, 35, 0) 0%,
+      rgba(20,20,20,0.28) 30%,
+      rgba(20,20,20,0.6) 55%,
+      rgba(12,12,12,0.85) 80%);
+
+  /* Немножко смягчаем смешивание — если нужно, попробуй other modes */
+  background-blend-mode: normal;
+}
+
+.content {
+  flex: 1;               /* занимает всё пространство */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+    .titlebar {
+      background: radial-gradient(circle at 40% 40%, #b34a43 30%, #c51a1a 50%, #173c8a 60%,);   /*instagram.exe*/
+      padding: 5px;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+    }
+    .titlebar .left{
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .titlebar .title{ font-size:14px; }
+    .titlebar .controls{ font-size:14px; opacity:.95; }
+    .back-btn{
+      display:none;
+      background:var(--menu);
+      color:#fff;
+      border:none;
+      padding:4px 8px;
+      cursor:pointer;
+      border-radius:3px;
+      font-size:14px;
+    }
+   .menu {
+  background: radial-gradient(circle at 40% 40%, #b34a43 30%, #c51a1a 50%, #173c8a 60%,);   /* File Edit View Options Help */
+  color: #ffffff;        
+  border-bottom: 1px solid #1a878f;   /* нижняя подводка File Edit.. */
+  padding: 4px 8px;
+}
+    .content{
+      flex:1;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    .profile { padding: 10px; }
+    .profile img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid #154d57;   /* обводка авы */
+    }
+    .stats {
+      margin: 10px 0;
+      font-size: 14px;
+      display: flex;
+      justify-content: flex-start;
+    }
+    .stat-item {
+      margin-right: 15px;
+      text-align: left;
+    }
+    .number {
+      display: block;
+      font-family: "Poppins", sans-serif;
+      font-size: 16px;
+    }
+    .label {
+      display: block;
+      font-size: 12px;
+    }
+    .bio { font-size: 13px; margin-bottom: 10px; }
+    .buttons button {
+      background: linear-gradient(50deg, #173168 0%, #c51a1ad8 70%, #b43b32 100%);  /* following message */
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      margin: 3px;
+      cursor: pointer;
+    }
+    .gallery{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:5px;
+      padding:14px;
+    }
+    .gallery img{
+      width:100%;
+      height:110px;
+      object-fit:cover;
+      cursor:pointer;
+      display:block;
+    }
+    .feed{ display:none; padding:8px; }
+    .post {
+  background: radial-gradient(circle at 30% 30%, #5b4a47 0%, transparent 40%),
+              radial-gradient(circle at 70% 70%, #263650 0%, transparent 50%),
+              radial-gradient(circle at 60% 40%, #8d3232 0%, transparent 50%),
+              linear-gradient(135deg, #2c2c2c, #222b52, #962020, #f15c5c);
+  border: 2px solid var(--border);
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+
+    .post-head{
+      display:flex;
+      align-items:center;
+      gap:19px;
+      padding:10px;            /*исправить!! на 11*/
+      background: radial-gradient(circle at 30% 30%, #5b4a47 0%, transparent 40%),
+              radial-gradient(circle at 70% 70%, #8a3327 0%, transparent 50%),
+              radial-gradient(circle at 60% 40%, #6d3636 0%, transparent 50%),
+              linear-gradient(135deg, #2c2c2c, #222b52, #962020, #f15c5c);   /* над постом */
+      border-bottom:1px solid var(--border);
+    }
+    .post-head img{
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      border:1px solid #2196aa;   /* обводка авы в постах */
+      object-fit:cover;
+    }
+    .post-head .uname{
+      font-weight:bold;
+      font-size:20px;
+      text-transform:lowercase;
+    }
+
+    .post-img img{
+      width:100%;
+      height:auto;
+      display:block;
+      object-fit:cover;
+    }
+
+    .post-body{ 
+      padding:8px 10px; 
+      color:var(--muted); 
+      font-size:13px; 
+    }
+    .likes{ 
+      font-family:"Poppins", 
+      sans-serif; font-size:14px; 
+      color:#ffffff;    /* цвет лайков */
+      margin-bottom:6px; 
+    }
+    .caption{ margin-bottom:6px; 
+      color:#000000; }   /* основной текс поста */
+
+
+    /* footer (музыка) — виден всегда */
+   .footer {
+  flex-shrink: 0;        /* фиксируем внизу */
+  background: var(--menu);
+  padding: 6px 10px;
+  color: #ffffff;
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  height: 36px;          /* уменьшаем высоту, меньше пустого */
+  box-sizing: border-box;
+}
+    .marquee{
+      overflow:hidden;
+      white-space:nowrap;
+      width:100%;
+    }
+    .marquee span{
+      display:inline-block;
+      padding-left:100%;
+      animation: scroll 14s linear infinite;
+    }
+    @keyframes scroll{
+      from{ transform: translateX(0); }
+      to{ transform: translateX(-100%); }
+    }
+
+    /* адаптивные мелочи */
+    @media (max-width:420px){
+      .window{ height:100vh; }
+      .profile{ padding:10px; }
+      .gallery{ gap:4px; padding:8px; }
+    }
+  </style>
+</head>
+<body> <div class="window" role="application" 
+  aria-label="instagram retro window"> 
+  <div class="titlebar"> 
+    <div class="left"> 
+      <button id="backBtn" 
+      class="back-btn" 
+      title="назад">←</button> 
+      <div class="title">instagram.exe</div> 
+    </div> 
+      <div class="controls">☐ ✕</div> 
+    </div> 
+    <div class="menu">File Edit View Options Help</div> 
+    <div class="content" id="content"> 
+      <div id="profileBlock"> 
+        <div class="profile"> 
+          <div class="profile-row"> 
+            <img src="https://i.pinimg.com/736x/5b/2d/40/5b2d40f1eeef9a2f96f17210fb25931d.jpg" alt="avatar"> <div> 
+              <div class="name">Silent hill.</div> 
+              <div class="stats"> 
+                <div class="stat-item"> 
+                  <span class="number">65</span> 
+                  <span class="label">posts</span> 
+                </div> 
+                <div class="stat-item"> 
+                  <span class="number">330</span> 
+                  <span class="label">followers</span> 
+                </div> 
+                <div class="stat-item"> 
+                  <span class="number">634</span> 
+                  <span class="label">following</span> 
+                </div> 
+              </div> 
+            </div> 
+          </div> 
+           <div class="bio">beautiful hearts are in your eyes.</div>
+          <div class="buttons"> 
+            <button id="followingBtn">following</button> 
+            <button id="messageBtn">message</button> 
+          </div> 
+        </div>
+
+        <div class="gallery" id="galleryBlock" aria-label="gallery">
+          <img src="https://i.pinimg.com/1200x/71/56/06/7156065afc9c2a7652202d5a78903741.jpg" alt="pic2" data-index="0"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/110x110?text=No+img'">
+          <img src="https://i.pinimg.com/736x/fa/6f/b4/fa6fb4479461c5bc09cc42088943d67b.jpg" alt="pic1" data-index="1"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/110x110?text=No+img'">
+          <img src="https://i.pinimg.com/1200x/9a/54/1f/9a541fa2531a4f6cfdb7062511e26cd9.jpg" alt="pic3" data-index="2"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/110x110?text=No+img'">
+          <img src="https://i.pinimg.com/736x/33/5e/73/335e735da6736fe6f1451c6389af71ec.jpg" alt="pic4" data-index="3"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/110x110?text=No+img'">
+          <img src="https://i.pinimg.com/736x/0f/43/3f/0f433ff3d1f039ace7c69443a215f133.jpg" alt="pic5" data-index="4"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/110x110?text=No+img'">
+          <img src="https://i.pinimg.com/736x/6b/5d/3e/6b5d3e0898115b3aff693c6b4f99998e.jpg" alt="pic6" data-index="5"
+               onerror="this.onerror=null;this.src='https://via.placeholder.com/110x110?text=No+img'">
+        </div>
+      </div>
+
+      <!-- FEED (вертикальные посты) -->
+      <div id="feedBlock" class="feed" aria-live="polite"></div>
+    </div>
+
+    <!-- footer: song / marquee -->
+    <div class="footer">
+      <div class="marquee" aria-hidden="false"><span>♫  I love you -  Fontaines D.C. ♫</span></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // данные (исправлен синтаксис — добавлены запятые между элементами)
+      const images = [
+        "https://i.pinimg.com/1200x/71/56/06/7156065afc9c2a7652202d5a78903741.jpg",
+        "https://i.pinimg.com/736x/fa/6f/b4/fa6fb4479461c5bc09cc42088943d67b.jpg",
+        "https://i.pinimg.com/1200x/9a/54/1f/9a541fa2531a4f6cfdb7062511e26cd9.jpg",
+        "https://i.pinimg.com/736x/33/5e/73/335e735da6736fe6f1451c6389af71ec.jpg",
+        "https://i.pinimg.com/736x/0f/43/3f/0f433ff3d1f039ace7c69443a215f133.jpg",
+        "https://i.pinimg.com/736x/6b/5d/3e/6b5d3e0898115b3aff693c6b4f99998e.jpg"
+      ];
+      const likes = [121,93,203,147,100,99];
+      const comments = [84,77,111,98,81,75];
+      const times = ["1 day ago","2 days ago","5 days ago","1 week ago","2 weeks ago","4 weeks ago"];
+      const captions = [
+        "and the blood of the root is the sweetest wine.",
+        "nothing ever goes away until it has taught us what we need to know",
+        "the hands remember what the mind forgets.",
+        "i touch reality only with my fingertips.",
+        "the sun loved the moon so much, he died every night to let her breathe.",
+        "reality doesn’t exist if you don’t look at it."
+      ];
+
+      // элементы
+      const feed = document.getElementById('feedBlock');
+      const profileBlock = document.getElementById('profileBlock');
+      const galleryBlock = document.getElementById('galleryBlock');
+      const backBtn = document.getElementById('backBtn');
+      const followingBtn = document.getElementById('followingBtn');
+      const messageBtn = document.getElementById('messageBtn');
+      const content = document.getElementById('content');
+
+      // строим вертикальную ленту (первые сверху)
+      function buildFeed(){
+        feed.innerHTML = '';
+        for(let i = 0; i < images.length; i++){
+          const post = document.createElement('article');
+          post.className = 'post';
+          post.dataset.index = i;
+          post.innerHTML = `
+             <div class="post-head">
+              <img src="https://i.pinimg.com/736x/5b/2d/40/5b2d40f1eeef9a2f96f17210fb25931d.jpg" alt="avatar">
+              <div class="uname">Silent hill.</div>
+            </div>
+            <div class="post-img"><img src="${images[i]}" alt="post image"></div>
+            <div class="post-body">
+              <div class="likes">💜 ${likes[i]} &nbsp; • &nbsp; 🗨️ ${comments[i]}</div>
+              <div class="caption"><strong>${captions[i] || ''}</strong></div>
+              <div class="view-comments">view all ${comments[i]} comments</div>
+              <div class="time">${times[i]}</div>
+            </div>
+          `;
+          feed.appendChild(post);
+        }
+      }
+
+      // открыть feed, показать сверху (первый пост) или прокрутить к индексу
+      function openFeed(scrollIndex = 0){
+        buildFeed();
+        profileBlock.style.display = 'none';
+        feed.style.display = 'block';
+        backBtn.style.display = 'inline-block';
+        // сначала сброс прокрутки, затем плавный скролл к элементу
+        content.scrollTop = 0;
+        setTimeout(()=> {
+          const posts = feed.querySelectorAll('.post');
+          if(posts[scrollIndex]){
+            posts[scrollIndex].scrollIntoView({behavior:'smooth', block:'start'});
+          }
+        }, 80);
+      }
+
+      function closeFeed(){
+        feed.style.display = 'none';
+        profileBlock.style.display = 'block';
+        backBtn.style.display = 'none';
+        content.scrollTop = 0;
+      }
+
+      // события
+      followingBtn.addEventListener('click', ()=> openFeed(0)); // открыть первый пост сверху
+      backBtn.addEventListener('click', closeFeed);
+      messageBtn.addEventListener('click', ()=> {
+        window.open('https://t.me/ssilentq','_blank');
+      });
+
+      // клик по миниатюре — открыть ленту и прокрутить к посту
+      galleryBlock.addEventListener('click', (e)=>{
+        const img = e.target.closest('img');
+        if(!img) return;
+        const idx = Number(img.dataset.index);
+        if(!isNaN(idx)) openFeed(idx);
+      });
+
+      // начальное состояние
+      feed.style.display = 'none';
+      backBtn.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
